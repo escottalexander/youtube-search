@@ -1,8 +1,15 @@
 body {
-    padding-top: 50px;
-  }
+  padding-top: 50px;
+}
 
-  .result {
-    text-align: center;
-    margin: 10px;
-  }
+.result {
+  text-align: center;
+  margin: 10px;
+}
+
+a:hover,
+a:focus,
+input:focus,
+button:focus {
+  outline: 5px dotted salmon;
+}

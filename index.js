@@ -7,35 +7,36 @@ const YOUTUBE_VIDEO_LINK = 'https://www.youtube.com/watch?v=';
 const YOUTUBE_CHANNEL_LINK = 'https://www.youtube.com/channel/';
 
 function getDataFromApi(searchTerm, callback) {
-    const settings = {
-        url: YOUTUBE_SEARCH_URL,
-        data: {
-          maxResults: '27',
-          part: 'snippet',  
-          key: 'AIzaSyAyJe1RuE0HkffDCIU-U2qeqhWcwXesarY',
-          q: searchTerm,
-          
-        },
-        dataType: 'json',
-        type: 'GET',
-        success: callback
-      };
-    
-      $.ajax(settings);
-    }
+  const settings = {
+    url: YOUTUBE_SEARCH_URL,
+    data: {
+      maxResults: '25',
+      part: 'snippet',
+      key: 'AIzaSyAyJe1RuE0HkffDCIU-U2qeqhWcwXesarY',
+      q: searchTerm,
+
+    },
+    dataType: 'json',
+    type: 'GET',
+    success: callback
+  };
+
+  $.ajax(settings);
+}
 
 function renderResult(result) {
   let renderObj = [];
-
-  for (let i = 0; i < result.items.length; i ++) {
-  let kind = result.items[i].id.kind;
-  let url = kind === "youtube#video" ? YOUTUBE_VIDEO_LINK + result.items[i].id.videoId : YOUTUBE_CHANNEL_LINK + result.items[i].id.channelId;
-  let imageSrc = result.items[i].snippet.thumbnails.medium.url;
-  let altAttr = result.items[i].title;
-  renderObj.push( `
+  let itemQuantity = result.items.length;
+  renderObj.push(`<h3>There are ${itemQuantity} results for your search query</h3>`);
+  for (let i = 0; i < itemQuantity; i++) {
+    let kind = result.items[i].id.kind;
+    let url = kind === "youtube#video" ? YOUTUBE_VIDEO_LINK + result.items[i].id.videoId : YOUTUBE_CHANNEL_LINK + result.items[i].id.channelId;
+    let imageSrc = result.items[i].snippet.thumbnails.medium.url;
+    let altAttr = result.items[i].title;
+    renderObj.push(`
    <a class="result" href='${url}'><img src='${imageSrc}' alt='${altAttr}'/></a>
   `);
-}
+  }
 
 
   return renderObj.join("");
@@ -43,7 +44,7 @@ function renderResult(result) {
 
 function displayYouTubeSearchData(data) {
   const results = renderResult(data);
-  $('.js-search-results').html(results);
+  $('.js-search-results').prop('hidden', false).html(results);
 }
 
 function watchSubmit() {
